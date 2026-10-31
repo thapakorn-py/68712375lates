@@ -13,7 +13,7 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'OPTIONS') {
 $host = "localhost";
 $username = "root";
 $password = "";
-$dbname = "dbshop";
+$dbname = "dbdhop";
 
 try {
     $conn = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $username, $password);

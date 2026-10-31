@@ -7,19 +7,19 @@
       <div v-else-if="error" class="alert alert-danger">{{ error }}</div>
 
       <div v-else class="product-grid">
-        <article v-for="item in assets" :key="item.asset_id" class="product-card">
+        <article v-for="item in products" :key="item.product_id" class="product-card">
           <div class="product-image-wrap">
             <img
               v-if="item.image"
               :src="imageUrl(item.image)"
-              :alt="item.asset_name"
+              :alt="item.product_name"
               class="product-image"
               @error="hideBrokenImage"
             />
             <div v-else class="product-image placeholder">No Image</div>
           </div>
 
-          <div class="product-name">{{ item.asset_name }}</div>
+          <div class="product-name">{{ item.product_name }}</div>
           <div class="product-price">{{ formatPrice(item.price) }} บาท</div>
 
           <button class="buy-btn" type="button">สั่งซื้อ</button>
@@ -36,7 +36,7 @@ import { API_BASE } from "@/config";
 export default {
   name: "AssetCatalog",
   setup() {
-    const assets = ref([]);
+    const products = ref([]);
     const loading = ref(true);
     const error = ref("");
     const apiBase = API_BASE.replace(/\/$/, "");
@@ -56,9 +56,9 @@ export default {
       event.target.style.display = "none";
     };
 
-    const fetchAssets = async () => {
+    const fetchProducts = async () => {
       try {
-        const response = await fetch(`${apiBase}/api_assets.php`);
+        const response = await fetch(`${apiBase}/api_product.php`);
 
         if (!response.ok) {
           throw new Error("ไม่สามารถดึงข้อมูลได้");
@@ -66,7 +66,7 @@ export default {
 
         const result = await response.json();
         if (result.success && Array.isArray(result.data)) {
-          assets.value = result.data;
+          products.value = result.data;
         } else {
           throw new Error(result.message || "ไม่สามารถดึงข้อมูลสินค้าได้");
         }
@@ -77,10 +77,10 @@ export default {
       }
     };
 
-    onMounted(fetchAssets);
+    onMounted(fetchProducts);
 
     return {
-      assets,
+      products,
       loading,
       error,
       imageUrl,
